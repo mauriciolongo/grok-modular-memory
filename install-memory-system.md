@@ -174,21 +174,31 @@ These files contain detailed information. Only read them when needed to conserve
 
 ## Step 3: Understand the Hooks (Please Read)
 
-This memory system can optionally install three helper hooks that run automatically:
+This memory system can optionally install two helper hooks that run automatically:
 
-| Hook              | What it does                                                                 | Why it’s useful                              |
-|-------------------|-------------------------------------------------------------------------------|----------------------------------------------|
-| `session-end.py`  | Records the date and time when a session ends in `.grok/memory.md`            | Helps you see when you last worked on a project |
-| `memory-reminder.py` | Gently reminds you to capture important decisions before you stop or before Grok compacts context | Prevents losing good ideas and decisions     |
-| `session-start.py` | (Currently limited) Present locally for future use                            | Kept for when Grok improves `SessionStart` hook support |
+| Hook                  | What it does                                                              | Why it’s useful                                      |
+|-----------------------|---------------------------------------------------------------------------|------------------------------------------------------|
+| `session-end.py`      | Records when a session ends in `.grok/memory.md`                          | Helps track when you last worked on the project      |
+| `memory-reminder.py`  | Gently reminds you to record decisions on `Stop` or before compaction     | Prevents losing good ideas and important decisions   |
 
-**Important notes:**
+**Important notes about these hooks:**
 
-- Because of current Grok Build limitations, the working hooks must be installed **globally** (in `~/.grok/hooks/`) rather than inside your project.
-- `session-start.py` is **intentionally left out** of the global registration. At the moment, Grok does not inject the `"additionalInstructions"` returned by `SessionStart` hooks into the model’s prompt. We keep the script locally so it is ready when platform support improves.
-- The hooks will only do meaningful work in projects that have a `.grok/memory.md` file.
+- They are registered **globally** (in `~/.grok/hooks/`). Once installed for one project, they can become active in other projects as well. This is expected behavior.
+- **They do nothing** if the current project does not have a `.grok/memory.md` file. They are completely safe to have enabled across multiple projects.
+- It is possible that suitable global hooks are **already installed** from a previous project where you activated this memory system. In that case, you may already see the hooks when you open the Hooks modal (`Ctrl + L`).
+- `session-start.py` is **not** registered globally. At the moment Grok does not support injecting `additionalInstructions` from `SessionStart` hooks, so it is kept locally only for future compatibility.
 
-**Do you want to install the hooks (`session-end.py` and `memory-reminder.py`)?**
+**What Grok should say when asking about the hooks:**
+
+When you reach this point, Grok should clearly explain the above points and then ask something like:
+
+> “I see that you are setting up the memory system. The reminder and session tracking hooks need to be registered globally. This means they can become active in other projects too. However, they will do nothing unless the project has a `.grok/memory.md` file.  
+> 
+> I notice you may already have global hooks from another project. Would you like to:
+> 1. Reuse the existing global hooks (recommended if they are already working), or
+> 2. Create a fresh registration specifically for this project?”
+
+**Do you want to proceed with the hooks?**
 
 Please answer **yes** or **no** before continuing.
 
@@ -199,7 +209,7 @@ Please answer **yes** or **no** before continuing.
 
 ## Step 4: Install the Global Hooks (Only if you answered “yes”)
 
-### 3.1 Create the global hooks directory using your project folder name
+### 4.1 Create the global hooks directory using your project folder name
 
 Run these commands while inside your project folder:
 
@@ -209,7 +219,7 @@ PROJECT_SLUG=$(basename "$PWD")
 mkdir -p ~/.grok/hooks/$PROJECT_SLUG
 ```
 
-### 3.2 Copy the working hook scripts
+### 4.2 Copy the working hook scripts
 
 ```bash
 cp .grok/hooks/session-end.py .grok/hooks/memory-reminder.py ~/.grok/hooks/$PROJECT_SLUG/
@@ -218,7 +228,7 @@ chmod +x ~/.grok/hooks/$PROJECT_SLUG/*.py
 
 > Note: We are **not** copying `session-start.py` into the global registration at this time.
 
-### 3.3 Create the global registration file
+### 4.3 Create the global registration file
 
 Create this file:
 

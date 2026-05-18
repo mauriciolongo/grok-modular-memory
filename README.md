@@ -65,6 +65,14 @@ Grok will guide you through the entire process (creating `AGENTS.md`, the memory
 
 **Important:** When following the guide, ask Grok to create any new files that are needed and to adapt their content and structure to match the specific requirements, domain, and context of your project (rather than using generic templates).
 
+### Global Hooks Behavior
+
+The reminder and session tracking hooks are registered **globally**. This means:
+
+- Once activated for one project, they can become active in other projects as well (this is expected behavior).
+- They are safe: the hooks do nothing if the current project does not have a `.grok/memory.md` file.
+- When running setup in a new project, Grok should check for existing global hooks from other projects and clearly explain the situation (including that the hooks are harmless without a memory file) before asking how to proceed.
+
 The full guide is here: **[install-memory-system.md](install-memory-system.md)**
 
 ---
