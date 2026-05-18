@@ -1,0 +1,49 @@
+{
+  "description": "Modular project memory system. Injects memory index on SessionStart, records session end, and gives a gentle reminder to capture important decisions on Stop and (especially) before context compaction.",
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "session-start.py",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "session-end.py",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "memory-reminder.py",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "memory-reminder.py",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}
