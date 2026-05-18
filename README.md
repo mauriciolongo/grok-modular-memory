@@ -1,6 +1,11 @@
 # Grok Modular Memory System
 
-A clean, hierarchical memory system for [Grok Build](https://grok.x.ai) that keeps long-term context lightweight while still giving the model rich, structured access to your project's knowledge.
+> A clean, hierarchical, and opinionated memory system for **Grok Build** that scales gracefully on long projects.
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![GitHub stars](https://img.shields.io/github/stars/mauriciolongo/grok-modular-memory?style=social)](https://github.com/mauriciolongo/grok-modular-memory/stargazers)
+
+A lightweight but powerful memory architecture for Grok that uses progressive disclosure, strict decision tracking, and well-timed reminders so the model actually remembers what matters — without bloating every context.
 
 ## Why This Exists
 
@@ -38,25 +43,71 @@ The result is a memory system that scales well even on long-running projects wit
     └── important-decisions.md
 ```
 
-## Quick Setup
+## Quick Start (Recommended)
 
-### 1. Copy this structure into your project
+### Option A — Use as a Template (Best)
 
-The easiest way is to clone this repository and copy the `.grok/` folder into your own project.
+1. Click the green **"Use this template"** button on the [GitHub repo](https://github.com/mauriciolongo/grok-modular-memory) (or clone it directly).
+2. Copy the entire `.grok/` folder into your own project.
+3. In a **fresh** Grok Build session inside your project, run:
 
-### 2. Trust the hooks
+   ```bash
+   /hooks-trust
+   ```
 
-In a Grok Build session, run:
+4. Press `Ctrl + L`, then `l` to reload hooks.
+
+### Option B — Manual Copy
+
+Clone this repo and copy just the `.grok/` directory into your target project:
 
 ```bash
-/hooks-trust
+git clone https://github.com/mauriciolongo/grok-modular-memory.git
+cp -r grok-modular-memory/.grok /path/to/your-project/
 ```
 
-Then reload hooks (`Ctrl+L` → `l`).
+Then follow steps 3–4 above.
 
-### 3. Start using it
+---
 
-From your next session onward, Grok will automatically see your memory index and follow the rules defined in `AGENTS.md`.
+**That's it.** From the next session onward, Grok will automatically load your memory index and follow the decision-tracking rules.
+
+## How to Test This System
+
+The best way to validate the memory system is **not** by asking Grok to clone the repo inside a session.
+
+### Recommended Testing Workflow
+
+1. **Create a completely fresh test directory** (outside this repository):
+
+   ```bash
+   mkdir ~/test-grok-memory
+   cd ~/test-grok-memory
+   ```
+
+2. **Copy only the `.grok/` folder** from this repo (or from a fresh clone):
+
+   ```bash
+   cp -r /path/to/grok-modular-memory/.grok .
+   ```
+
+3. **Start a brand new Grok Build session** in that folder (very important — do not continue an old session).
+
+4. Run `/hooks-trust` and reload hooks (`Ctrl+L` → `l`).
+
+5. **Run a structured test**:
+   - Ask Grok to do some real work (refactor something, plan a feature, debug an issue).
+   - Make at least one explicit decision and ask it to record it in `important-decisions.md`.
+   - Do some trivial commands (`ls`, `cat`, etc.) to verify the reminder does **not** fire on every tool use.
+   - Work until you see the `PreCompact` reminder (you can force compaction or just work long enough).
+   - Start a second session later and verify that the memory index + recent decisions are still present.
+
+6. **Verify behavior**:
+   - The model should reference the memory rules without you reminding it.
+   - `important-decisions.md` should be maintained in reverse chronological order.
+   - Reminders should only appear at `Stop` and `PreCompact`, not on routine tool calls.
+
+This approach gives you the most realistic signal about whether the system actually helps in practice.
 
 ## The Modular Memory Philosophy
 
