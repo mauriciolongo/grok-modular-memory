@@ -1,7 +1,13 @@
 #!/usr/bin/env python3
 """
 SessionStart hook for the modular memory system.
-Loads .grok/memory.md and injects it (plus usage instructions) via additionalInstructions.
+
+NOTE (May 2026): As of current Grok Build versions, returning "additionalInstructions"
+from a SessionStart hook is NOT injected into the model prompt by the platform.
+This script is kept for forward compatibility.
+
+The reliable method today is the static "Session Start Rule" placed in the
+project's root AGENTS.md file.
 """
 
 import json

@@ -1,20 +1,26 @@
-# Agent Instructions (Modular Memory Subsystem)
+# Agent Instructions
 
-> Note: The root `AGENTS.md` in this project contains the active "Session Start Rule".
-> This file contains the detailed rules for the memory subsystem.
+You are a capable assistant working on this project.
+
+**Session Start Rule (Important):**  
+At the start of **every new session**, first read the file `.grok/memory.md`.  
+This loads the project memory index and the rules for the modular memory system.  
+Treat the contents of `.grok/memory.md` as active context for the entire session.
+
+---
 
 ## Modular Memory System
 
 We use a hierarchical memory system:
 
-- `.grok/memory.md` is the lightweight index.
+- `.grok/memory.md` is the **lightweight index** (read this first on every new session).
 - Detailed information is stored in separate files inside `.grok/memory/`.
-- Only read specific memory files when you actually need the information.
+- Only read specific memory files (`tools.md`, `user-preferences.md`, `important-decisions.md`) when you actually need the information.
 
 ### Memory Files Overview:
 - `tools.md` — Tools, methods, frameworks, and resources
 - `user-preferences.md` — Working style, preferences, and rules
-- `important-decisions.md` — Important decisions (see specific rules below)
+- `important-decisions.md` — Important decisions (see strict rules below)
 
 ---
 
@@ -37,7 +43,9 @@ Example format:
 ---
 
 ## General Memory Rules
+
 - Keep `.grok/memory.md` lightweight and up to date.
 - Create new memory files when a topic becomes too large.
 - Always update the index (`.grok/memory.md`) when you create or significantly modify a linked file.
 - After major work or decisions, perform a quick memory review and update.
+- The hooks in `.grok/hooks/` provide additional automation (session timestamps + gentle reminders on Stop/PreCompact).

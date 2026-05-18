@@ -1,5 +1,5 @@
 {
-  "description": "Modular project memory system. Injects memory index on SessionStart, records session end, and gives a gentle reminder to capture important decisions on Stop and (especially) before context compaction.",
+  "description": "Modular project memory system. Note: As of May 2026, SessionStart hook injection is not yet supported by the platform. The root AGENTS.md provides the reliable memory loading. This file keeps the full hook set for future compatibility. Reminders on Stop/PreCompact and session-end timestamping are functional.",
   "hooks": {
     "SessionStart": [
       {

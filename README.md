@@ -18,13 +18,19 @@ Grok's built-in cross-session memory is powerful, but many users want **more con
 
 The result is a memory system that scales well even on long-running projects without bloating every context window.
 
-## Features
+## Current Working State (as of May 2026)
 
-- **SessionStart hook** — Automatically loads `.grok/memory.md` and teaches the model how to use the modular system
-- **SessionEnd hook** — Records when you stopped working
-- **Smart reminders** — Only fires on `Stop` and `PreCompact` (not on every single tool call)
-- **Strict decision tracking** — New decisions go at the top, newer decisions supersede older ones
-- **AGENTS.md** — Project rules that are automatically loaded
+**Important:** As of the current version of Grok Build, `SessionStart` hooks that return `additionalInstructions` are **not yet injected** into the model's prompt by the platform (this was confirmed during real testing in the `grok-memory-test` project).
+
+### What works reliably today:
+- Static instructions placed in the **root `AGENTS.md`** (this is the recommended approach)
+- `SessionEnd` hook (records session timestamp)
+- Memory reminders on `Stop` and `PreCompact`
+
+### What is aspirational (for when the platform supports it):
+- Dynamic injection via the `SessionStart` hook
+
+The template is designed so it works **today** using the reliable static method, while keeping the hook infrastructure for the future.
 
 ## Directory Structure
 
@@ -43,34 +49,43 @@ The result is a memory system that scales well even on long-running projects wit
     └── important-decisions.md
 ```
 
-## Quick Start (Recommended)
+## Installation
 
-### Option A — Use as a Template (Best)
+The easiest and most reliable way to set up the memory system is to use the dedicated installation guide.
 
-1. Click the green **"Use this template"** button on the [GitHub repo](https://github.com/mauriciolongo/grok-modular-memory) (or clone it directly).
-2. Copy the entire `.grok/` folder into your own project.
-3. In a **fresh** Grok Build session inside your project, run:
+### Recommended Workflow
 
-   ```bash
-   /hooks-trust
-   ```
+1. Copy the `.grok/` folder from this repository into your project.
+2. Open the file `install-memory-system.md` in your project.
+3. In a Grok Build session, simply tell Grok:
 
-4. Press `Ctrl + L`, then `l` to reload hooks.
+   > "Please read and follow the instructions in `install-memory-system.md` to set up the modular memory system for this project."
 
-### Option B — Manual Copy
+Grok will guide you through the entire process (creating `AGENTS.md`, the memory files, and optionally installing the hooks).
 
-Clone this repo and copy just the `.grok/` directory into your target project:
+**Important:** When following the guide, ask Grok to create any new files that are needed and to adapt their content and structure to match the specific requirements, domain, and context of your project (rather than using generic templates).
 
-```bash
-git clone https://github.com/mauriciolongo/grok-modular-memory.git
-cp -r grok-modular-memory/.grok /path/to/your-project/
-```
-
-Then follow steps 3–4 above.
+The full guide is here: **[install-memory-system.md](install-memory-system.md)**
 
 ---
 
-**That's it.** From the next session onward, Grok will automatically load your memory index and follow the decision-tracking rules.
+### What the Guide Covers
+
+- Creating the root `AGENTS.md` with the required "Session Start Rule"
+- Creating the actual memory template files (`memory.md`, `important-decisions.md`, `user-preferences.md`, `tools.md`)
+- Understanding current platform limitations
+- Installing the working global hooks (with your explicit consent)
+- Verification steps
+
+We strongly recommend using the guided workflow above rather than trying to follow the instructions manually.
+
+### Quick Overview
+
+1. Copy the `.grok/` folder into your project.
+2. Follow the steps in `install-memory-system.md` to configure your root `AGENTS.md`.
+3. Optionally install the global hooks for automatic reminders and session tracking.
+
+The local `SessionStart` hook is included in the template for future compatibility but is not registered globally at this time (see the install guide for details).
 
 ## How to Test This System
 
