@@ -73,6 +73,9 @@ The reminder and session tracking hooks are registered **globally**. This means:
 - They are safe: the hooks do nothing if the current project does not have a `.grok/memory.md` file.
 - When running setup in a new project, Grok should check for existing global hooks from other projects and clearly explain the situation (including that the hooks are harmless without a memory file) before asking how to proceed.
 
+**Note on our original intention:**  
+Creating globally registered hooks was not our original plan. We designed the system around local project hooks (stored in `.grok/hooks/`) for better isolation between projects. However, due to current limitations in the Grok Build TUI, reliable local project hook discovery is not yet supported. The global registration method is currently the only working mechanism available. We hope this will change soon as the application is updated and we can move back to the preferred local hook approach.
+
 The full guide is here: **[install-memory-system.md](install-memory-system.md)**
 
 ---
@@ -174,6 +177,11 @@ You can extend this system easily:
 ## License
 
 MIT — feel free to use this in your own projects.
+
+## Contributors & Acknowledgments
+
+- **Mauricio Longo** – Creator and maintainer of the Grok Modular Memory System
+- **Grok** (built by xAI) – Assisted with architecture, documentation, testing workflows, and iterative improvements to the system
 
 ---
 
